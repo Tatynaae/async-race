@@ -1,0 +1,70 @@
+.car-row {
+  display: grid;
+  gap: 8px;
+  padding: 12px 0;
+  border-bottom: 1px solid #1f2937;
+}
+
+.car-row__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.car-row__controls button {
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: #0f172a;
+  color: #f8fafc;
+  min-width: 72px;
+}
+
+.car-row__controls button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.car-row__title {
+  font-weight: 700;
+  color: #e2e8f0;
+}
+
+.car-row__track {
+  position: relative;
+  width: 100%;
+  min-height: 64px;
+  min-width: 280px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #0b1224, #111827 60%, #0b1224);
+  border: 1px solid #1f2937;
+  overflow: hidden;
+}
+
+.car-row__car {
+  position: relative;
+  width: fit-content;
+  will-change: transform;
+}
+
+@keyframes car-drive {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(92%);
+  }
+}
+
+.car-row__car--race {
+  animation-name: car-drive;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@media (min-width: 500px) {
+  .car-row__track {
+    min-width: 420px;
+  }
+}

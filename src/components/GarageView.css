@@ -1,0 +1,119 @@
+.garage {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.garage__header h1 {
+  margin: 0;
+  font-size: clamp(1.75rem, 4vw, 2.4rem);
+}
+
+.garage__meta {
+  margin: 6px 0 0;
+  color: #cbd5f5;
+}
+
+.garage__banner {
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  color: #052e16;
+  font-weight: 800;
+}
+
+.garage__error {
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #451a1a;
+  color: #fecdd3;
+  border: 1px solid #7f1d1d;
+}
+
+.garage__panel {
+  display: grid;
+  gap: 12px;
+}
+
+@media (min-width: 900px) {
+  .garage__panel {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.garage__fieldset {
+  padding: 12px;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  background: #0b1224;
+}
+
+.garage__fieldset h2 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+}
+
+.garage__inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.garage__inputs input[type='text'],
+.garage__inputs input:not([type='color']) {
+  flex: 1 1 220px;
+  min-height: 40px;
+  border-radius: 10px;
+  border: 1px solid #33415556;
+  padding: 0 10px;
+  background: #111827;
+  color: #f8fafc;
+}
+
+.garage__inputs button {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #334155;
+  background: #1d4ed8;
+  color: #f8fafc;
+}
+
+.garage__inputs button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.garage__race {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.garage__race button {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid #334155;
+  background: #0ea5e9;
+  color: #0b1324;
+  font-weight: 700;
+}
+
+.garage__race button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.garage__empty {
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px dashed #334155;
+  color: #cbd5f5;
+  text-align: center;
+}
+
+.garage__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}

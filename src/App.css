@@ -1,0 +1,56 @@
+.app {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 20% 20%, #1d4ed833, transparent 35%),
+    radial-gradient(circle at 80% 0%, #22c55e22, transparent 32%), #04070f;
+  color: #e2e8f0;
+}
+
+.app__shell {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px clamp(16px, 4vw, 32px);
+  border-bottom: 1px solid #111827;
+  background: #0b1224cc;
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.app__brand {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.app__logo {
+  font-size: 32px;
+}
+
+.app__title {
+  margin: 0;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.app__subtitle {
+  margin: 2px 0 0;
+  color: #94a3b8;
+  font-size: 0.95rem;
+}
+
+.app__main {
+  padding: clamp(16px, 4vw, 32px);
+  max-width: 1200px;
+  margin: 0 auto 48px;
+}
+
+@media (max-width: 520px) {
+  .app__shell {
+    position: static;
+  }
+}

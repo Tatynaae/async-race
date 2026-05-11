@@ -1,23 +1,45 @@
 .car-row {
-  display: grid;
-  gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   padding: 12px 0;
   border-bottom: 1px solid #1f2937;
 }
 
+@media (min-width: 500px) {
+  .car-row {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
+
 .car-row__controls {
   display: flex;
-  flex-wrap: wrap;
   gap: 8px;
 }
 
-.car-row__controls button {
+.car-row__controls-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.car-row__controls-col.a button {
+  width: 36px;
+  padding: 8px;
+}
+
+.car-row__controls-col.b button {
+  min-width: 72px;
   padding: 8px 10px;
+}
+
+.car-row__controls button {
   border-radius: 8px;
   border: 1px solid #334155;
   background: #0f172a;
   color: #f8fafc;
-  min-width: 72px;
 }
 
 .car-row__controls button:disabled {
@@ -25,26 +47,49 @@
   cursor: not-allowed;
 }
 
-.car-row__title {
-  font-weight: 700;
-  color: #e2e8f0;
-}
-
 .car-row__track {
+  /* Mover is full track width so translateX(…) % is relative to the track, not the icon. */
+  container-type: inline-size;
+  container-name: car-track;
+  /* Icon / travel math scales with track width so narrow tracks (≈500px viewports) stay valid. */
+  --car-display-width: clamp(2.75rem, 12cqw + 1.85rem, 5rem);
   position: relative;
   width: 100%;
-  min-height: 64px;
-  min-width: 280px;
+  min-width: 0;
+  flex: 1 1 auto;
+  min-height: clamp(3.25rem, 10cqw + 2rem, 4.5rem);
   border-radius: 12px;
   background: linear-gradient(90deg, #0b1224, #111827 60%, #0b1224);
   border: 1px solid #1f2937;
+}
+
+.car-row__name {
+  font-weight: 700;
+  color: #02295d;
+  position: absolute;
+  top: clamp(-9px, -1.8cqw, -6px);
+  right: clamp(6px, 2.5cqw, 12px);
+  max-width: min(10rem, 48cqw);
+  padding: clamp(3px, 1cqw, 5px) clamp(4px, 1.6cqw, 8px);
+  font-size: clamp(0.68rem, 2.8cqw + 0.45rem, 0.82rem);
+  line-height: 1.2;
+  background-color: #e2e8f0;
+  border-radius: 4px;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .car-row__car {
-  position: relative;
-  width: fit-content;
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
   will-change: transform;
+}
+
+.car-row__car-inner {
+  flex-shrink: 0;
+  width: fit-content;
 }
 
 @keyframes car-drive {
@@ -53,7 +98,7 @@
   }
 
   to {
-    transform: translateX(92%);
+    transform: translateX(calc((100% - var(--car-display-width)) * var(--track-travel, 0.92)));
   }
 }
 
@@ -65,6 +110,7 @@
 
 @media (min-width: 500px) {
   .car-row__track {
-    min-width: 420px;
+    flex: 1 1 0%;
+    min-width: min(12rem, 100%);
   }
 }

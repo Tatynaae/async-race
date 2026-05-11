@@ -1,17 +1,20 @@
 import type { CSSProperties } from 'react';
 import type { CarMotion } from '../store/slices/raceSlice';
 
+/** Uses `.car-row__track` `--car-display-width` (container-sized) for travel math. */
+const trackTravelTransform = (offsetPercent: number) =>
+  `translateX(calc((100% - var(--car-display-width)) * ${offsetPercent / 100}))`;
+
 export const getCarMotionStyle = (motion: CarMotion): CSSProperties => {
   if (motion.phase === 'racing') {
     return {
       animationDuration: `${motion.durationMs}ms`,
-      transform: 'translateX(0)',
     };
   }
   const transition =
     motion.phase === 'returning' ? `transform ${motion.durationMs}ms linear` : 'none';
   return {
-    transform: `translateX(${motion.offsetPercent}%)`,
+    transform: trackTravelTransform(motion.offsetPercent),
     transition,
   };
 };
@@ -30,7 +33,12 @@ export const getCarRowUiState = (
     motion.phase === 'starting' ||
     motion.phase === 'racing' ||
     motion.phase === 'finished';
-  const stopDisabled = garageLocked || pageRaceActive || atStart || motion.phase === 'starting';
+  const stopDisabled =
+    garageLocked ||
+    pageRaceActive ||
+    atStart ||
+    motion.phase === 'starting' ||
+    motion.phase === 'returning';
   const controlsDisabled = garageLocked || pageRaceActive || motion.phase === 'returning';
   return { carClassName, startDisabled, stopDisabled, controlsDisabled };
 };

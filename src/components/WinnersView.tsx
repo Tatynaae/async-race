@@ -30,6 +30,10 @@ export const WinnersView = () => {
     <section className="winners">
       <WinnersToolbar garageLocked={garageLocked} />
       {status === 'error' && <div className="winners__error">Unable to reach the winners API.</div>}
+      <WinnersTable rows={rows} page={winnersPage} />
+      {!rows.length && (
+        <div className="winners__empty">No winners yet. Finish a race in the garage.</div>
+      )}
       <Pagination
         page={winnersPage}
         totalItems={total}
@@ -38,10 +42,6 @@ export const WinnersView = () => {
         label="Winners pagination"
         onPageChange={pageChange}
       />
-      <WinnersTable rows={rows} page={winnersPage} />
-      {!rows.length && (
-        <div className="winners__empty">No winners yet. Finish a race in the garage.</div>
-      )}
     </section>
   );
 };

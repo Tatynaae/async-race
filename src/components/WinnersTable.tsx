@@ -26,7 +26,7 @@ export const WinnersTable = ({ rows, page }: WinnersTableProps) => {
             <tr key={row.id}>
               <td>{(page - 1) * WINNERS_PAGE_SIZE + idx + 1}</td>
               <td>
-                <CarIcon color={row.color} label={row.name} />
+                <CarIcon color={row.color} />
               </td>
               <td>{row.name}</td>
               <td>{row.wins}</td>

@@ -47,6 +47,10 @@ export const GarageWorkbench = ({
       carIds={carIds}
       cars={cars}
     />
+    {!cars.length ? (
+      <div className="garage__empty">No cars here yet. Create one to get started.</div>
+    ) : null}
+    <GarageCarList cars={cars} garageLocked={garageLocked} />
     <Pagination
       page={garagePage}
       totalItems={total}
@@ -55,9 +59,5 @@ export const GarageWorkbench = ({
       label="Garage pagination"
       onPageChange={onPageChange}
     />
-    {!cars.length ? (
-      <div className="garage__empty">No cars here yet. Create one to get started.</div>
-    ) : null}
-    <GarageCarList cars={cars} garageLocked={garageLocked} />
   </>
 );

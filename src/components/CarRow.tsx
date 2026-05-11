@@ -1,8 +1,9 @@
-import { useMemo } from 'react';
+import { useMemo, type CSSProperties } from 'react';
 import type { Car } from '../types/models';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { getCarMotion } from '../utils/raceSelectors';
 import { getCarMotionStyle, getCarRowUiState } from './carRowModel';
+import { TRACK_END_PERCENT } from '../constants/config';
 import { CarRowControls } from './CarRowControls';
 import { CarIcon } from './CarIcon';
 import './CarRow.css';
@@ -25,10 +26,15 @@ export const CarRow = ({ car, garageLocked }: CarRowProps) => {
   return (
     <div className="car-row">
       <CarRowControls car={car} ui={ui} dispatch={dispatch} />
-      <div className="car-row__title">{car.name}</div>
-      <div className="car-row__track">
+      <div
+        className="car-row__track"
+        style={{ '--track-travel': TRACK_END_PERCENT / 100 } as CSSProperties}
+      >
+        <span className="car-row__name">{car.name}</span>
         <div className={ui.carClassName} style={style}>
-          <CarIcon color={car.color} label={car.name} />
+          <div className="car-row__car-inner">
+            <CarIcon color={car.color} />
+          </div>
         </div>
       </div>
     </div>

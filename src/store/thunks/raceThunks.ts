@@ -42,8 +42,14 @@ export const startCarDrive =
       const durationMs = computeDriveDurationMs(started.distance, started.velocity);
       dispatch(markCarRacing({ id, durationMs }));
       await driveEngine(id);
-      dispatch(markCarFinished(id));
+      if (getState().race.cars[id]?.phase === 'racing') {
+        dispatch(markCarFinished(id));
+      }
     } catch {
+      const phase = getState().race.cars[id]?.phase;
+      if (phase === 'returning' || phase === 'idle') {
+        return;
+      }
       await handleDriveFailure(dispatch, id);
     }
   };
@@ -67,39 +73,47 @@ const createWinnerSnapshot = (): WinnerSnapshot => ({
   timeSec: 0,
 });
 
-export const startPageRace = (cars: Car[]) => async (dispatch: AppDispatch) => {
-  if (!cars.length) {
-    return;
-  }
-  dispatch(setPageRaceActive(true));
-  dispatch(setBanner(null));
-  const snapshot = createWinnerSnapshot();
-  const runCar = async (car: Car) => {
-    dispatch(markCarStarting(car.id));
-    try {
-      const started = await startEngine(car.id);
-      const durationMs = computeDriveDurationMs(started.distance, started.velocity);
-      dispatch(markCarRacing({ id: car.id, durationMs }));
-      const startedAt = performance.now();
-      await driveEngine(car.id);
-      const timeSec = (performance.now() - startedAt) / 1000;
-      dispatch(markCarFinished(car.id));
-      if (snapshot.carId === null) {
-        snapshot.carId = car.id;
-        snapshot.name = car.name;
-        snapshot.timeSec = timeSec;
-      }
-    } catch {
-      await handleDriveFailure(dispatch, car.id);
+export const startPageRace =
+  (cars: Car[]) => async (dispatch: AppDispatch, getState: () => RootState) => {
+    if (!cars.length) {
+      return;
     }
+    dispatch(setPageRaceActive(true));
+    dispatch(setBanner(null));
+    const snapshot = createWinnerSnapshot();
+    const runCar = async (car: Car) => {
+      dispatch(markCarStarting(car.id));
+      try {
+        const started = await startEngine(car.id);
+        const durationMs = computeDriveDurationMs(started.distance, started.velocity);
+        dispatch(markCarRacing({ id: car.id, durationMs }));
+        const startedAt = performance.now();
+        await driveEngine(car.id);
+        if (getState().race.cars[car.id]?.phase !== 'racing') {
+          return;
+        }
+        const timeSec = (performance.now() - startedAt) / 1000;
+        dispatch(markCarFinished(car.id));
+        if (snapshot.carId === null) {
+          snapshot.carId = car.id;
+          snapshot.name = car.name;
+          snapshot.timeSec = timeSec;
+        }
+      } catch {
+        const phase = getState().race.cars[car.id]?.phase;
+        if (phase === 'returning' || phase === 'idle') {
+          return;
+        }
+        await handleDriveFailure(dispatch, car.id);
+      }
+    };
+    await Promise.all(cars.map(runCar));
+    if (snapshot.name && snapshot.carId !== null) {
+      dispatch(setBanner(`Winner: ${snapshot.name}`));
+      await upsertWinnerScore(snapshot.carId, snapshot.timeSec);
+    }
+    dispatch(setPageRaceActive(false));
   };
-  await Promise.all(cars.map(runCar));
-  if (snapshot.name && snapshot.carId !== null) {
-    dispatch(setBanner(`Winner: ${snapshot.name}`));
-    await upsertWinnerScore(snapshot.carId, snapshot.timeSec);
-  }
-  dispatch(setPageRaceActive(false));
-};
 
 export const resetPageRace = (carIds: number[]) => async (dispatch: AppDispatch) => {
   dispatch(setPageRaceActive(false));
